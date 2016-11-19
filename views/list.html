@@ -1,0 +1,51 @@
+
+{% extends "base.html" %}
+{% block title %}LIST{% endblock %}
+{% block inner %}
+
+
+
+<div class="row" style="font-size: 16px;font-family: 'Microsoft YaHei UI';">
+    <div class="col-md-12">
+        <div class="pannel panel-default">
+            <div class="panel-heading">
+                销售列表
+            </div>
+
+            <div class="panel panel-body">
+                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                    <th align="middle">ERPCO</th>
+                    <th align="middle">姓名</th>
+                    <th align="middle">部门</th>
+                    <th align="middle">类别</th>
+                    <th align="middle">区域</th>
+                    <th align="middle">类别</th>
+                    <th align="middle">价格</th>
+                    <th align="middle">成本</th>
+                    <th align="middle">销量</th>
+                    {% for each in datas %}
+                    <tr>
+                        <td align="middle">{{ each.ERPCO }}</td>
+                        <td align="middle">{{ each.name }}</td>
+                        <td align="middle">{{ each.department }}</td>
+                        <td align="middle">{{ each.cate }}</td>
+                        <td align="right">{{ each.area  }}</td>
+                        <td align="middle">{{ each.cate }}</td>
+                        <td align="middle">{{ each.price }}</td>
+                        <td align="middle">{{ each.cost }}</td>
+                        <td align="right">{{ each.count }}</td>
+                    </tr>
+
+                    {% endfor %}
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<!-- /. ROW  -->
+
+
+{% endblock %}

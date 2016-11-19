@@ -1,0 +1,367 @@
+{% extends 'base.html' %}
+{% block title %}DASHBOARD{% endblock %}
+{% block inner %}
+
+<div class="row">
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-aqua">
+            <div class="inner">
+                <h3>aaa</h3>
+
+                <p>流量（TB）</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-area-chart"></i>
+            </div>
+            <a href="../index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-green">
+            <div class="inner">
+                <h3>bbb</h3>
+
+                <p>峰值利用率</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-bar-chart"></i>
+            </div>
+            <a href="../index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-yellow">
+            <div class="inner">
+                <h3>ccc</h3>
+
+                <p>忙时利用率</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-line-chart"></i>
+            </div>
+            <a href="../index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-red">
+            <div class="inner">
+                <h3>ddd</h3>
+
+                <p>均值利用率</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-pie-chart"></i>
+            </div>
+            <a href="../index" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+</div>
+<div class="row">
+
+    <div class="page-header">
+
+
+        <form method="post">
+
+            <div class="row">
+                <div class="col-md-3 col-md-offset-1">
+
+                    <div class="input-group">
+                   <span class="input-group-addon" id="sizing-addon1">
+                       <span class="glyphicon glyphicon-th-list"></span>
+                   </span>
+                        <input autocomplete="off" list="catelist" type="text" name="cate" class="form-control" placeholder="类型选择" aria-describedby="basic-addon1">
+                        <datalist id="catelist">
+                            {%for each in pricesum_by_cate%}
+                            <option value="{{each.cate}}">
+                            {%endfor%}
+                        </datalist>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+
+
+                    <div class="input-group">
+                   <span class="input-group-addon" id="sizing-addon1">
+                       <span class="glyphicon glyphicon-home"></span>
+                   </span>
+                        <input autocomplete="off" list="citylist" type="text" name="area" class="form-control" placeholder="区域选择" aria-describedby="basic-addon1">
+                        <datalist id="citylist">
+
+                            {%for each in pricesum_by_area%}
+                            <option value="{{each.area}}">
+                            {%endfor%}
+
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+
+
+                    <div class="input-group">
+                   <span class="input-group-addon" id="sizing-addon1">
+                       <span class="glyphicon glyphicon-calendar"></span>
+                   </span>
+                        <input autocomplete="off" list="datelist" type="text" name="pubdate" class="form-control" placeholder="日期选择" aria-describedby="basic-addon1">
+                        <datalist id="datelist">
+
+                            {%for each in countsum_by_date%}
+                            <option value="{{each.pubdate}}">
+                            {%endfor%}
+
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <input class="btn btn-success btn-sm" type="submit" value="确 认" style="font-size: 16px;font-family: 'Microsoft YaHei UI'">
+                </div>
+            </div>
+
+
+
+        </form>
+
+    </div>
+
+</div>
+<!-- /. chartROW1  -->
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="chart1"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+                <div id="chart2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- /. chartROW2  -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div id="chart3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel panel-default">
+
+            <div class="panel-body">
+                <div id="chart4"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- /. ROW  -->
+{% endblock %}
+
+{% block js %}
+$(function () {
+$('#chart1').highcharts({
+title: {
+text: '销量发展趋势',
+x: -20 //center
+},
+subtitle: {
+text: 'xxx公司',
+x: -20
+},
+xAxis: {
+categories: [
+{%for each in countsum_by_date%}
+'{{each.pubdate}}',
+{%endfor%}
+]
+},
+yAxis: {
+title: {
+text: '销售量（个）'
+},
+plotLines: [{
+value: 0,
+width: 1,
+color: '#808080'
+}]
+},
+tooltip: {
+valueSuffix: '个'
+},
+legend: {
+layout: 'vertical',
+align: 'right',
+verticalAlign: 'middle',
+borderWidth: 0
+},
+series: [{
+name: '销售量',
+data: [{%for each in countsum_by_date%}
+        {{each.count}},
+        {%endfor%}
+]
+}, ]
+});
+});
+
+
+
+
+$(function () {
+$('#chart2').highcharts({
+chart: {
+type: 'column'
+},
+title: {
+text: '个人销售额对比'
+},
+subtitle: {
+text: 'xxx公司'
+},
+xAxis: {
+categories: [
+{%for each in pricesum_by_name%}
+'{{each.name}}',
+{%endfor%}
+],
+crosshair: true
+},
+yAxis: {
+min: 0,
+title: {
+text: '销售额（元）'
+}
+},
+tooltip: {
+headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+        '<td style="padding:0"><b>{point.y:.1f} 元</b></td></tr>',
+    footerFormat: '</table>',
+shared: true,
+useHTML: true
+},
+plotOptions: {
+column: {
+pointPadding: 0.2,
+borderWidth: 0
+}
+},
+series: [{
+name: '销售额',
+data: [
+{%for each in pricesum_by_name%}
+{{each.price}},
+{%endfor%}
+]
+
+}]
+});
+});
+
+
+
+
+
+
+
+$(function () {
+Highcharts.chart('chart3', {
+chart: {
+type: 'bar'
+},
+title: {
+text: '各地销售额排名'
+},
+xAxis: {
+categories: [
+{%for each in pricesum_by_area%}
+'{{each.area}}',
+{%endfor%}
+]
+},
+yAxis: {
+min: 0,
+title: {
+}
+},
+legend: {
+reversed: true
+},
+plotOptions: {
+series: {
+stacking: 'normal'
+}
+},
+series: [{
+name: '销售额',
+data: [
+{%for each in pricesum_by_area%}
+{{each.price}},
+{%endfor%}
+]
+}]
+});
+});
+
+
+
+
+$(function () {
+Highcharts.chart('chart4', {
+chart: {
+plotBackgroundColor: null,
+plotBorderWidth: null,
+plotShadow: false,
+type: 'pie'
+},
+title: {
+text: '各类产品销售额占比'
+},
+tooltip: {
+pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+},
+plotOptions: {
+pie: {
+allowPointSelect: true,
+cursor: 'pointer',
+dataLabels: {
+enabled: true,
+format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+style: {
+color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+}
+}
+}
+},
+series: [{
+name: 'Brands',
+colorByPoint: true,
+data: [
+{%for each in pricesum_by_cate%}
+{name: '{{each.cate}}',
+y: {{each.price}}},
+{%endfor%}
+]
+}]
+});
+});
+{% endblock %}
