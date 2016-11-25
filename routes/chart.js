@@ -36,16 +36,38 @@ router.all('/',function (req,res) {
     var pricesum_by_name="SELECT name,sum(price) as price FROM saleslist"+substr+" group by name"
     var pricesum_by_area="SELECT area,sum(price) as price FROM saleslist"+substr+" group by area order by price desc"
     var pricesum_by_cate="SELECT cate,sum(price) as price FROM saleslist"+substr+" group by cate order by price desc"
+    var sum_price="SELECT round(sum(price),0) as price from saleslist"+substr
+    var sum_count="SELECT sum(count) as count from saleslist"+substr
+    var sum_cost="SELECT round(sum(cost),0) as cost from saleslist"+substr
+    var avg_price="select round(avg(price),1) as price from saleslist"+substr
+
+
     db.all(countsum_by_date,function (err,rows1) {
         db.all(pricesum_by_name,function (err,rows2) {
             db.all(pricesum_by_area,function (err,rows3) {
                 db.all(pricesum_by_cate,function (err,rows4) {
-                    res.render('chart.html',{
-                        countsum_by_date:rows1,
-                        pricesum_by_name:rows2,
-                        pricesum_by_area:rows3,
-                        pricesum_by_cate:rows4
+                    db.all(sum_price,function (err,rows5) {
+                        db.all(sum_count,function (err,rows6) {
+                            db.all(sum_cost,function (err,rows7) {
+                                db.all(avg_price,function (err,rows8) {
+                                    res.render('chart.html',{
+                                        countsum_by_date:rows1,
+                                        pricesum_by_name:rows2,
+                                        pricesum_by_area:rows3,
+                                        pricesum_by_cate:rows4,
+                                        sum_price:rows5,
+                                        sum_count:rows6,
+                                        sum_cost:rows7,
+                                        avg_price:rows8
+                                    })
+                                })
+
+                            })
+
+                        })
+
                     })
+
                 })
             })
         })
